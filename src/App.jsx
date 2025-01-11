@@ -51,10 +51,10 @@ const AppContent = () => {
       {/* Sidebar */}
       <Drawer anchor="left" open={isSidebarOpen} onClose={toggleSidebar}>
         <List>
-          <ListItem button component={Link} to="/" onClick={toggleSidebar}>
+          {/* <ListItem button component={Link} to="/" onClick={toggleSidebar}>
             <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem button component={Link} to="/product" onClick={toggleSidebar}>
+          </ListItem> */}
+          <ListItem button component={Link} to="/" onClick={toggleSidebar}>
             <ListItemText primary="Shoes" />
           </ListItem>
           <ListItem button component={Link} to="/sidebar" onClick={toggleSidebar}>
@@ -65,8 +65,8 @@ const AppContent = () => {
 
       {/* Routes */}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product" element={<Product />} />
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<Product />} />
         <Route path="/sidebar" element={<Sidebar />} />
       </Routes>
     </>
