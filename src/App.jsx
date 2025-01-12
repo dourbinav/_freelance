@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Product } from './Product';
+import { ProductDetail } from './ProductDetail';
 import { Sidebar } from './Sidebar';
 import Home from './Home';
 import {
@@ -67,6 +68,7 @@ const AppContent = () => {
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
         <Route path="/" element={<Product />} />
+        <Route path="/productdetail/:id" element={<ProductDetail />} />
         <Route path="/sidebar" element={<Sidebar />} />
       </Routes>
     </>
