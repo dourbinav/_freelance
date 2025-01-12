@@ -172,7 +172,7 @@ export const Product = () => {
                 image={product.image}
                 alt={product.name}
                 style={{
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   height: '200px',
                   width: '100%',
                   cursor: 'pointer', // Makes it visually clear that the image is clickable

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Product } from './Product';
 import { ProductDetail } from './ProductDetail';
-import { Sidebar } from './Sidebar';
-import Home from './Home';
+import { Watches } from './Watches';
+import {Clothes} from "./Clothes";
+
 import {
   AppBar,
   Toolbar,
@@ -33,43 +34,39 @@ const AppContent = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{  boxShadow: 'none' }}>
         <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleSidebar}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6">
-            {headings[location.pathname] || 'Trending Products'}
+          <Typography variant="h6" style={{ flexGrow: 1, fontWeight: 'bold' }}>
+            OutFitTrend Store
           </Typography>
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar */}
-      <Drawer anchor="left" open={isSidebarOpen} onClose={toggleSidebar}>
-        <List>
-          {/* <ListItem button component={Link} to="/" onClick={toggleSidebar}>
-            <ListItemText primary="Home" />
-          </ListItem> */}
-          <ListItem button component={Link} to="/" onClick={toggleSidebar}>
-            <ListItemText primary="Shoes" />
-          </ListItem>
-          <ListItem button component={Link} to="/sidebar" onClick={toggleSidebar}>
-            <ListItemText primary="Watches" />
-          </ListItem>
-        </List>
-      </Drawer>
+      {/* Transparent AppBar for Shoes and Watches in a row */}
+      <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+        <Toolbar style={{ justifyContent: 'center' }}>
+          <List style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
+            <ListItem button component={Link} to="/clothes"  style={{ width: 'auto' }}>
+              <ListItemText primary="Clothes" />
+            </ListItem>
+            <ListItem button component={Link} to="/" style={{ width: 'auto' }}>
+              <ListItemText primary="Shoes" />
+            </ListItem>
+            <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
+              <ListItemText primary="Watches" />
+            </ListItem>
+          </List>
+        </Toolbar>
+      </AppBar>
+
 
       {/* Routes */}
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
         <Route path="/" element={<Product />} />
         <Route path="/productdetail/:id" element={<ProductDetail />} />
-        <Route path="/sidebar" element={<Sidebar />} />
+        <Route path="/Clothes" element={<Clothes />} />
+        <Route path="/watches" element={<Watches />} />
       </Routes>
     </>
   );
