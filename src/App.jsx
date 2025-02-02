@@ -4,6 +4,7 @@ import { Product } from './Product';
 import { ProductDetail } from './ProductDetail';
 import { Watches } from './Watches';
 import {Clothes} from "./Clothes";
+import {Flipflop} from "./Flipflop";
 
 import {
   AppBar,
@@ -16,6 +17,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ProductPage from './AdminPage';
 
 const AppContent = () => {
   const location = useLocation(); // Now within Router context
@@ -55,6 +57,9 @@ const AppContent = () => {
             <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
               <ListItemText primary="Watches" />
             </ListItem>
+            <ListItem button component={Link} to="/Flipflop" style={{ width: 'auto' }}>
+              <ListItemText primary="Flip Flops" />
+            </ListItem>
           </List>
         </Toolbar>
       </AppBar>
@@ -67,6 +72,9 @@ const AppContent = () => {
         <Route path="/productdetail/:id" element={<ProductDetail />} />
         <Route path="/Clothes" element={<Clothes />} />
         <Route path="/watches" element={<Watches />} />
+        <Route path="/flipflop" element={<Flipflop />} />
+        <Route path="/admin" element={<ProductPage/>}/>
+        <Route path="*" element={<div>Page Not found</div>} />
       </Routes>
     </>
   );

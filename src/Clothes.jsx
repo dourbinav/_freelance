@@ -1,9 +1,9 @@
 import React from 'react';
+import { Product } from './Product';
 export const  Clothes =()=>{
   return (
     <>
-   this is Clothes Page
-
+   <Product category="Clothes"/>
     </>
   )
 }

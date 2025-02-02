@@ -1,153 +1,172 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
+import axios from "axios"
 
 // Temporary data
-const products = [
-  {
-    id: 1,
-    name: 'Shoes',
-    price: '$50',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_c7xb2e.jpg', // Replace with actual image URLs
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
-  },
-  {
-    id: 2,
-    name: 'Watches',
-    price: '$100',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_3_ok1pr4.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
-  },
-  {
-    id: 3,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 4,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_usmzcg.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 5,
-    name: 'Shoes',
-    price: '$50',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_2_cjj1zt.jpg', // Replace with actual image URLs
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
-  },
-  {
-    id: 6,
-    name: 'Watches',
-    price: '$100',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_2_cjj1zt.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
-  },
-  {
-    id: 7,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_1_crldrx.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 8,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 9,
-    name: 'Shoes',
-    price: '$50',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_2_fhyscb.jpg', // Replace with actual image URLs
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
-  },
-  {
-    id: 10,
-    name: 'Watches',
-    price: '$100',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.31.56_PM_gdqo20.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
-  },
-  {
-    id: 11,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 12,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 13,
-    name: 'Shoes',
-    price: '$50',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg', // Replace with actual image URLs
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
-  },
-  {
-    id: 14,
-    name: 'Shoes',
-    price: '$100',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.58_PM_tfbrrz.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
-  },
-  {
-    id: 15,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.32.00_PM_1_qypivr.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 15,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.31.57_PM_dcp35v.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 16,
-    name: 'Shoes',
-    price: '$50',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.32.00_PM_gdjmel.jpg', // Replace with actual image URLs
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
-  },
-  {
-    id: 2,
-    name: 'Watches',
-    price: '$100',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_3_ok1pr4.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
-  },
-  {
-    id: 3,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-  {
-    id: 3,
-    name: 'Shoes',
-    price: '$30',
-    image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
-    whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
-  },
-];
 
-export const Product = () => {
+// const products = [
+//   {
+//     id: 1,
+//     name: 'Shoes',
+//     price: '$50',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_c7xb2e.jpg', // Replace with actual image URLs
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
+//   },
+//   {
+//     id: 2,
+//     name: 'Watches',
+//     price: '$100',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_3_ok1pr4.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
+//   },
+//   {
+//     id: 3,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 4,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_usmzcg.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 5,
+//     name: 'Shoes',
+//     price: '$50',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_2_cjj1zt.jpg', // Replace with actual image URLs
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
+//   },
+//   {
+//     id: 6,
+//     name: 'Watches',
+//     price: '$100',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_2_cjj1zt.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
+//   },
+//   {
+//     id: 7,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_1_crldrx.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 8,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 9,
+//     name: 'Shoes',
+//     price: '$50',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_2_fhyscb.jpg', // Replace with actual image URLs
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
+//   },
+//   {
+//     id: 10,
+//     name: 'Watches',
+//     price: '$100',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.31.56_PM_gdqo20.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
+//   },
+//   {
+//     id: 11,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 12,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 13,
+//     name: 'Shoes',
+//     price: '$50',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_1_plehu5.jpg', // Replace with actual image URLs
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
+//   },
+//   {
+//     id: 14,
+//     name: 'Shoes',
+//     price: '$100',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.58_PM_tfbrrz.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
+//   },
+//   {
+//     id: 15,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.32.00_PM_1_qypivr.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 15,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.31.57_PM_dcp35v.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 16,
+//     name: 'Shoes',
+//     price: '$50',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581781/WhatsApp_Image_2025-01-09_at_10.32.00_PM_gdjmel.jpg', // Replace with actual image URLs
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Shoes',
+//   },
+//   {
+//     id: 2,
+//     name: 'Watches',
+//     price: '$100',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_3_ok1pr4.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Watches',
+//   },
+//   {
+//     id: 3,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+//   {
+//     id: 3,
+//     name: 'Shoes',
+//     price: '$30',
+//     image: 'https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg',
+//     whatsappLink: 'https://wa.me/7505433516?text=I%20am%20interested%20in%20Hoodies',
+//   },
+// ];
+    // If you need to navigate after clicking on a product
+
+// Fetch data from the backend API
+
+
+export const Product = ({category}) => {
+  const [products, setProducts] = useState([]);
+  category=category??"Shoes"
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:5000/getProducts?category=${category}`);
+        setProducts(response.data.products);  
+      } catch (error) {
+        console.error('Error fetching the data: ', error);
+      }
+    }
+    fetchData();
+  }, []);
   const navigate = useNavigate();
 
   const handleImageClick = (productId) => {
@@ -157,7 +176,10 @@ export const Product = () => {
   return (
     <div style={{ padding: '20px' }}>
       <Grid container spacing={3}>
-        {products.map((product) => (
+        {products.map((product) => {
+          const message = `I am interested in ${product.name}. Price: ${product.Price}. Here is the image: ${product.Image}.html`
+          const whatsappLink = `https://wa.me/7505433516?text=${encodeURIComponent(message)}`;
+          return(
           <Grid
             item
             xs={6}
@@ -169,7 +191,7 @@ export const Product = () => {
             <Card style={{ height: '100%' }}>
               <CardMedia
                 component="img"
-                image={product.image}
+                image={product.Image}
                 alt={product.name}
                 style={{
                   objectFit: 'contain',
@@ -194,12 +216,12 @@ export const Product = () => {
                     fontSize: 'clamp(0.8rem, 2vw, 1.2rem)',
                   }}
                 >
-                  Price: {product.price}
+                  &#8377;: {product.price}
                 </Typography>
                 <Button
                   variant="contained"
                   color="success"
-                  href={product.whatsappLink}
+                  href={whatsappLink}
                   target="_blank"
                   style={{
                     marginTop: '10px',
@@ -210,8 +232,8 @@ export const Product = () => {
                 </Button>
               </CardContent>
             </Card>
-          </Grid>
-        ))}
+          </Grid>)
+})}
       </Grid>
     </div>
   );

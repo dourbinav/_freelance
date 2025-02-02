@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,8 +14,10 @@ const products = [
     id: 1,
     name: "Shoes",
     price: "$50",
-    image: "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_c7xb2e.jpg",
+    image:
+      "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_c7xb2e.jpg",
     additionalImages: [
+      "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.59_PM_c7xb2e.jpg",
       "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.02_PM_fg54pf.jpg",
       "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.31.57_PM_dcp35v.jpg",
       "https://res.cloudinary.com/dipq9ynqq/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1736581782/WhatsApp_Image_2025-01-09_at_10.32.01_PM_3_ok1pr4.jpg",
@@ -25,6 +27,20 @@ const products = [
 ];
 
 export const ProductDetail = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNext = (product) => {
+    if (currentImageIndex < product.additionalImages.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <Grid container spacing={3}>
@@ -41,17 +57,34 @@ export const ProductDetail = () => {
                 {/* Main Image */}
                 <CardMedia
                   component="img"
-                  image={product.image}
+                  image={product.Images[currentImageIndex]}
                   alt={product.name}
                   style={{
                     width: "100%",
                     height: "300px",
-                    objectFit: "cover",
+                    objectFit: "fit",
                     borderRadius: "8px",
                     marginBottom: "10px",
                   }}
                 />
-                {/* Slider */}
+                {/* Navigation Buttons */}
+                <Box display="flex" justifyContent="space-between" mb={2}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleBack}
+                    disabled={currentImageIndex <= 0}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleNext(product)}
+                    disabled={currentImageIndex >= product.Images.length - 1}
+                  >
+                    
+                  </Button>
+                </Box>
+                {/* Thumbnail Slider */}
                 <Grid container spacing={1}>
                   {product.additionalImages.map((img, index) => (
                     <Grid item xs={3} key={index}>
@@ -59,11 +92,17 @@ export const ProductDetail = () => {
                         component="img"
                         image={img}
                         alt={`Additional ${index + 1}`}
+                        onClick={() => setCurrentImageIndex(index)}
                         style={{
                           width: "100%",
                           height: "80px",
                           objectFit: "cover",
                           borderRadius: "4px",
+                          border:
+                            currentImageIndex === index
+                              ? "2px solid #4caf50"
+                              : "2px solid transparent",
+                          cursor: "pointer",
                         }}
                       />
                     </Grid>
