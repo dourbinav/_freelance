@@ -1,80 +1,91 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Product } from './Product';
 import { ProductDetail } from './ProductDetail';
 import { Watches } from './Watches';
-import {Clothes} from "./Clothes";
-import {Flipflop} from "./Flipflop";
-
+import { Clothes } from './Clothes';
+import { Flipflop } from './Flipflop';
+import AdminLogin from './AdminLogin';
+import ProductPage from './ProductPage';
 import {
   AppBar,
   Toolbar,
-  IconButton,
   Typography,
-  Drawer,
   List,
   ListItem,
   ListItemText,
+  IconButton
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import ProductPage from './AdminPage';
+import AdminIcon from '@mui/icons-material/AccountCircle';  // You can use a material icon for admin, or import your own logo
 
 const AppContent = () => {
-  const location = useLocation(); // Now within Router context
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation(); // Get the current route
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
-  // Dynamic headings based on the current path
-  const headings = {
-    '/': 'Trending Products',
-    '/product': 'Shoes',
-    '/sidebar': 'Watches',
-  };
+  // Check if the current route should hide the AppBar
+  const shouldHideAppBar = location.pathname === '/admin' || location.pathname === '/adminlogin';
 
   return (
     <>
-      <AppBar position="static" style={{  boxShadow: 'none' }}>
+      <AppBar position="static" style={{ boxShadow: 'none' }}>
         <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1, fontWeight: 'bold' }}>
+          <Link  to="/">
+          {/* OutFitTrend Store Logo - Links to the homepage */}
+          <Typography 
+            variant="h6" 
+            style={{ flexGrow: 1, fontWeight: 'bold',color:'white' }}
+          >
             OutFitTrend Store
           </Typography>
+          </Link>
+          {/* Admin Icon */}
+          <IconButton
+            edge="end"
+            color="inherit"
+            component={Link}
+            to="/admin"
+            style={{ marginLeft: 'auto' }} // Position the admin icon to the right
+          >
+            <AdminIcon /> {/* You can replace this with your own admin logo */}
+          </IconButton>
         </Toolbar>
       </AppBar>
 
-      {/* Transparent AppBar for Shoes and Watches in a row */}
-      <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-        <Toolbar style={{ justifyContent: 'center' }}>
-          <List style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
-            <ListItem button component={Link} to="/clothes"  style={{ width: 'auto' }}>
-              <ListItemText primary="Clothes" />
-            </ListItem>
-            <ListItem button component={Link} to="/" style={{ width: 'auto' }}>
-              <ListItemText primary="Shoes" />
-            </ListItem>
-            <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
-              <ListItemText primary="Watches" />
-            </ListItem>
-            <ListItem button component={Link} to="/Flipflop" style={{ width: 'auto' }}>
-              <ListItemText primary="Flip Flops" />
-            </ListItem>
-          </List>
-        </Toolbar>
-      </AppBar>
-
+      {/* Conditionally render AppBar for category navigation */}
+      {!shouldHideAppBar && (
+        <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
+          <Toolbar style={{ justifyContent: 'center' }}>
+            <List style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
+              <ListItem button component={Link} to="/clothes" style={{ width: 'auto' }}>
+                <ListItemText primary="Clothes" />
+              </ListItem>
+              <ListItem button component={Link} to="/" style={{ width: 'auto' }}>
+                <ListItemText primary="Shoes" />
+              </ListItem>
+              <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
+                <ListItemText primary="Watches" />
+              </ListItem>
+              <ListItem button component={Link} to="/Flipflop" style={{ width: 'auto' }}>
+                <ListItemText primary="Flip Flops" />
+              </ListItem>
+            </List>
+          </Toolbar>
+        </AppBar>
+      )}
 
       {/* Routes */}
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/" element={<Product />} />
-        <Route path="/productdetail/:id" element={<ProductDetail />} />
+        <Route path="/productdetail/:id/:category" element={<ProductDetail />} />
         <Route path="/Clothes" element={<Clothes />} />
         <Route path="/watches" element={<Watches />} />
         <Route path="/flipflop" element={<Flipflop />} />
-        <Route path="/admin" element={<ProductPage/>}/>
-        <Route path="*" element={<div>Page Not found</div>} />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={localStorage.getItem('admin-auth') ? <ProductPage /> : <AdminLogin />}
+        />
+        <Route path="*" element={<div>Page Not Found</div>} />
       </Routes>
     </>
   );
