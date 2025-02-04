@@ -26,7 +26,7 @@ export const ProductDetail = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/getProduct/${id}?category=${category}`
+        `https://freelance-backend-phi.vercel.app/getProduct/${id}?category=${category}`
       );
       console.log("=>>", response.data.data);
       setProduct(response.data.data[0]);

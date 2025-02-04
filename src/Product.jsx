@@ -16,7 +16,7 @@ export const Product = ({ category }) => {
     async function fetchData() {
       try {
         setloading(true);
-        const response = await axios.get(`http://localhost:5000/getProducts?category=${effectiveCategory}`);
+        const response = await axios.get(`https://freelance-backend-phi.vercel.app/getProducts?category=${effectiveCategory}`);
         
         if (response.data.products) {
           setProducts(response.data.products);
@@ -40,7 +40,7 @@ export const Product = ({ category }) => {
   }
 
   const handleImageClick = (productId) => {
-    navigate(`/productdetail/${productId}/category=${effectiveCategory}`); // Use effectiveCategory in URL
+    navigate(`/productdetail/${productId}/${effectiveCategory}`); // Use effectiveCategory in URL
   };
 
   return (
