@@ -252,7 +252,7 @@ const ProductPage = () => {
                   style={{
                     width: "100px",
                     height: "100px",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     marginRight: "8px",
                     marginBottom: "8px",
                     cursor: "pointer",
@@ -279,7 +279,7 @@ const ProductPage = () => {
         <Grid container spacing={3}>
           {products.length > 0 ? (
             products.map((product) => (
-              <Grid item xs={12} sm={6} md={4} key={product.id}>
+              <Grid item xs={6} sm={4} md={3} key={product.id}>  {/* Change xs={12} to xs={6} */}
                 <Card>
                   <CardMedia
                     component="img"
@@ -315,7 +315,7 @@ const ProductPage = () => {
       )}
 
       {/* Image Slider Dialog */}
-      <Dialog open={openSlider} onClose={handleCloseSlider} fullWidth maxWidth="md">
+      {currentProductImages.length>1 &&(<Dialog open={openSlider} onClose={handleCloseSlider} fullWidth maxWidth="md">
         <DialogTitle>Product Images</DialogTitle>
         <DialogContent>
           <Slider
@@ -326,36 +326,31 @@ const ProductPage = () => {
             slidesToScroll={1}
             arrows={currentProductImages.length > 1}  // Only show navigation arrows if there are multiple images
           >
-            {currentProductImages.map((image, index) => (
+            { currentProductImages.length>1 ? (currentProductImages.map((image, index) => (
               <div key={index}>
-                <img
-                  src={image}
-                  alt={`Product Image ${index + 1}`}
-                  style={{ width: "100%" }}
-                />
+                <img src={image} alt={`Product Image ${index + 1}`} style={{ width: "100%" }} />
               </div>
-            ))}
+            ))):
+            <div>
+            <img src={image} alt={`Product Image ${index + 1}`} style={{ width: "100%" }} />
+            </div>
+          }
           </Slider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseSlider} color="primary">
+          <Button onClick={handleCloseSlider} color="secondary">
             Close
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>)}
 
-      {/* Snackbar for Success/Error Messages */}
+      {/* Snackbar for notifications */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity={snackbarSeverity}
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
