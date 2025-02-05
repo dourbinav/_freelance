@@ -14,13 +14,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  IconButton
+  IconButton,
+  useMediaQuery,
 } from '@mui/material';
 import AdminIcon from '@mui/icons-material/AccountCircle';  // You can use a material icon for admin, or import your own logo
 
 const AppContent = () => {
   const location = useLocation(); // Get the current route
-
+  const isMobile = useMediaQuery('(max-width:600px)'); // Detect mobile screens
+  
   // Check if the current route should hide the AppBar
   const shouldHideAppBar = location.pathname === '/admin' || location.pathname === '/adminlogin';
 
@@ -28,14 +30,14 @@ const AppContent = () => {
     <>
       <AppBar position="static" style={{ boxShadow: 'none' }}>
         <Toolbar>
-          <Link  to="/">
-          {/* OutFitTrend Store Logo - Links to the homepage */}
-          <Typography 
-            variant="h6" 
-            style={{ flexGrow: 1, fontWeight: 'bold',color:'white' }}
-          >
-            OutFitTrend Store
-          </Typography>
+          <Link to="/" style={{ textDecoration: 'none', flexGrow: 1 }}>
+            {/* OutFitTrend Store Logo - Links to the homepage */}
+            <Typography 
+              variant="h6" 
+              style={{ fontWeight: 'bold', color: 'white' }}
+            >
+              OutFitTrend Store
+            </Typography>
           </Link>
           {/* Admin Icon */}
           <IconButton
@@ -45,7 +47,7 @@ const AppContent = () => {
             to="/admin"
             style={{ marginLeft: 'auto' }} // Position the admin icon to the right
           >
-            <AdminIcon /> {/* You can replace this with your own admin logo */}
+            <AdminIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -54,18 +56,37 @@ const AppContent = () => {
       {!shouldHideAppBar && (
         <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
           <Toolbar style={{ justifyContent: 'center' }}>
-            <List style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
+            <List 
+              style={{
+                display: 'flex', 
+                flexDirection: 'row', 
+                padding: 0, 
+                flexWrap: 'nowrap', // Ensure items stay on one line
+              }}
+            >
               <ListItem button component={Link} to="/clothes" style={{ width: 'auto' }}>
-                <ListItemText primary="Clothes" />
+                <ListItemText 
+                  primary="Clothes" 
+                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem' }} // Responsive font size
+                />
               </ListItem>
               <ListItem button component={Link} to="/" style={{ width: 'auto' }}>
-                <ListItemText primary="Shoes" />
+                <ListItemText 
+                  primary="Shoes" 
+                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem' }} // Responsive font size
+                />
               </ListItem>
               <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
-                <ListItemText primary="Watches" />
+                <ListItemText 
+                  primary="Watches" 
+                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem' }} // Responsive font size
+                />
               </ListItem>
-              <ListItem button component={Link} to="/Flipflop" style={{ width: 'auto' }}>
-                <ListItemText primary="Flip Flops" />
+              <ListItem button component={Link} to="/flipflop" style={{ width: 'auto' }}>
+                <ListItemText 
+                  primary="Flip Flops" 
+                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem' }} // Responsive font size
+                />
               </ListItem>
             </List>
           </Toolbar>
