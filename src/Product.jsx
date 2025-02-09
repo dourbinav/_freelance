@@ -36,8 +36,24 @@ export const Product = ({ category }) => {
     return <LoadingSpinner />;
   }
 
+  const parseSizes = (sizesString) => {
+    try {
+      return JSON.parse(sizesString);
+    } catch (error) {
+      console.error("Error parsing sizes:", error);
+      return [];
+    }
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
+    <>
+    <div style={{ padding: '20px',backgroundColor:"#f2f2f2", height:"100%" }}>
+                  <Typography variant="h4" style={{ fontWeight: 'bold' , height:"120px",textAlign:"center"}}>
+                    Trending Products
+                    <Typography  variant="h6" style={{  textAlign:"center"}}>
+                      Our trends that customer love!
+                    </Typography>
+                  </Typography>
       <Grid container spacing={3}>
         {products.length > 0 ? (
           products.map((product) => {
@@ -67,7 +83,7 @@ export const Product = ({ category }) => {
                       {product.Category}
                     </Typography>
                     <Typography variant="body1" style={{ fontSize: 'clamp(0.8rem, 2vw, 1.2rem)' }}>
-                      &#8377;: {product.Price}
+                    Sizes: {parseSizes(product.Sizes).join(", ")}
                     </Typography>
                     <Button
                       variant="contained"
@@ -88,5 +104,6 @@ export const Product = ({ category }) => {
         )}
       </Grid>
     </div>
+    </>
   );
 };

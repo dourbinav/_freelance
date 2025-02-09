@@ -52,13 +52,20 @@ const AppContent = () => {
 
   return (
     <>
+      {/* First AppBar (Navbar) */}
       <AppBar 
         position="fixed"  // Fixed position to stick at the top
-        style={{ boxShadow: 'none', width: '100%', top: 0, left: 0 }}  // Ensure the AppBar stays fixed at the top
+        style={{
+          boxShadow: 'none', 
+          width: '100%', 
+          top: 0, 
+          left: 0,
+          height: '80px', // Increase navbar height here
+        }}
       >
-        <Toolbar>
+        <Toolbar style={{ height: '100%' }}> {/* Ensure toolbar height matches AppBar */}
           <Link to="/" style={{ textDecoration: 'none', flexGrow: 1 }}>
-            <Typography variant="h6" style={{ fontWeight: 'bold', color: 'white' }}>
+            <Typography variant="h5" style={{ fontWeight: 'bold', color: 'white' }}>
               OutFitTrend Store
             </Typography>
           </Link>
@@ -77,21 +84,27 @@ const AppContent = () => {
 
       {/* Conditionally render AppBar for category navigation */}
       {shouldShowAppBar && (
-        <AppBar 
-          position="fixed"  // Fixed position but hide on scroll down
+        <Toolbar 
+          position="fixed" 
           style={{
-            backgroundColor: 'transparent',
             boxShadow: 'none', 
-            top: '64px',  // Adjust for the height of the first AppBar
+            top: '80px',  // Adjust for the height of the first AppBar
             width: '100%',
-            zIndex: 1000, // Ensure it's above the content
-            transform: isScrollUp ? 'translateY(0)' : 'translateY(-100%)', // Hide on scroll down
-            transition: 'transform 0.3s ease', // Smooth transition
+            marginTop: '50px',
+            padding: '0',
+            transform: isScrollUp ? 'translateY(0)' : 'translateY(-100%)',
           }}
         >
-          <Toolbar style={{ justifyContent: 'center' }}>
+          <Toolbar 
+            style={{
+              justifyContent: 'space-between',
+              width: '100%',
+              padding: '0',
+              height: '60px',  // Increase height for this toolbar
+            }}
+          >
             {/* Use Grid to wrap Buttons for better control of layout on small screens */}
-            <Grid container spacing={1} justifyContent="center">
+            <Grid container spacing={1} rowGap={1} justifyContent="space-between">
               <Grid item xs={6} sm={3}>
                 <Button
                   fullWidth
@@ -99,7 +112,12 @@ const AppContent = () => {
                   color="primary"
                   component={Link}
                   to="/clothes"
-                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem', backgroundColor: '#2196f3' }} // Custom background color
+                  sx={{
+                    fontSize: isMobile ? '0.7rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0, 
+                    height: '48px', // Keep button height the same
+                  }}
                 >
                   Clothes
                 </Button>
@@ -111,7 +129,12 @@ const AppContent = () => {
                   color="primary"
                   component={Link}
                   to="/"
-                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem', backgroundColor: '#2196f3' }} // Custom background color
+                  sx={{
+                    fontSize: isMobile ? '0.7rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
                 >
                   Shoes
                 </Button>
@@ -123,7 +146,12 @@ const AppContent = () => {
                   color="primary"
                   component={Link}
                   to="/watches"
-                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem', backgroundColor: '#2196f3' }} // Custom background color
+                  sx={{
+                    fontSize: isMobile ? '0.7rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
                 >
                   Watches
                 </Button>
@@ -135,18 +163,23 @@ const AppContent = () => {
                   color="primary"
                   component={Link}
                   to="/flipflop"
-                  sx={{ fontSize: isMobile ? '0.9rem' : '1.2rem', backgroundColor: '#2196f3' }} // Custom background color
+                  sx={{
+                    fontSize: isMobile ? '0.7rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
                 >
                   Flip Flops
                 </Button>
               </Grid>
             </Grid>
           </Toolbar>
-        </AppBar>
+        </Toolbar>
       )}
 
       {/* Add a margin-top to the main content to ensure it doesn't get hidden behind the fixed AppBar */}
-      <Box style={{ marginTop: '160px' }}> {/* This margin accounts for the AppBar height */}
+      <Box style={{ marginTop: '150px' }}> {/* This margin accounts for the AppBar height and new height adjustments */}
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Product />} />

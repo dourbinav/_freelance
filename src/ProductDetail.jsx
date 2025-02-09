@@ -61,6 +61,14 @@ export const ProductDetail = () => {
   }
 
   const isImageArray = Array.isArray(product.Image);
+  const parseSizes = (sizesString) => {
+    try {
+      return JSON.parse(sizesString);
+    } catch (error) {
+      console.error("Error parsing sizes:", error);
+      return [];
+    }
+  };
 
   return (
     <div style={{ padding: "10px" }}> {/* Reduce padding here to reduce gap */}
@@ -136,7 +144,7 @@ export const ProductDetail = () => {
                     marginBottom: "15px", // Reduce margin-bottom
                   }}
                 >
-                  Price: {product.Price}
+                  Sizes: {parseSizes(product.Sizes).join(", ")}
                 </Typography>
                 <Button
                   variant="contained"

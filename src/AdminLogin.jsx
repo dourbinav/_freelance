@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Snackbar, Alert, Box, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,13 +11,23 @@ const AdminLogin = () => {
 
   const navigate = useNavigate();
 
+  // Disable scrolling when the AdminLogin component is mounted
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    // Clean up by resetting body overflow when component unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const handleLogin = () => {
     // Hardcoded credentials (for demonstration purposes)
     const correctEmail = 'admin@example.com';
     const correctPassword = 'admin123';
 
     if (email === correctEmail && password === correctPassword) {
-        localStorage.setItem('admin-auth',correctEmail)
+      localStorage.setItem('admin-auth', correctEmail);
       navigate('/admin');
     } else {
       setSnackbarMessage('Invalid email or password');
@@ -31,10 +41,11 @@ const AdminLogin = () => {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',  // Align to top
         height: '100vh',
         backgroundColor: '#f4f6f8',
-        padding: 2,
+        overflow: 'hidden', // Disable scroll
+        paddingTop: '50px', // Add some top padding (you can adjust this value)
       }}
     >
       <Paper sx={{ padding: 4, width: '100%', maxWidth: 400, boxShadow: 3 }}>
