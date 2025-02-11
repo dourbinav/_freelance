@@ -63,16 +63,16 @@ const AppContent = () => {
           height: '80px', // Increase navbar height here
         }}
       >
-        <Toolbar style={{ height: '100%' }}> {/* Ensure toolbar height matches AppBar */}
+        <Toolbar style={{ height: '100%' ,backgroundColor:'#ffffff' }}> {/* Ensure toolbar height matches AppBar */}
           <Link to="/" style={{ textDecoration: 'none', flexGrow: 1 }}>
-            <Typography variant="h5" style={{ fontWeight: 'bold', color: 'white' }}>
+            <Typography variant="h5" style={{  color: 'black' }}>
               OutFitTrend Store
             </Typography>
           </Link>
           {/* Admin Icon */}
           <IconButton
             edge="end"
-            color="inherit"
+            // color="inherit"
             component={Link}
             to="/admin"
             style={{ marginLeft: 'auto' }} // Position the admin icon to the right
@@ -85,14 +85,15 @@ const AppContent = () => {
       {/* Conditionally render AppBar for category navigation */}
       {shouldShowAppBar && (
         <Toolbar 
-          position="fixed" 
+          // position="fixed" 
           style={{
             boxShadow: 'none', 
+             backgroundColor:"#f8f8f8",
             top: '80px',  // Adjust for the height of the first AppBar
             width: '100%',
             marginTop: '50px',
             padding: '0',
-            transform: isScrollUp ? 'translateY(0)' : 'translateY(-100%)',
+            // transform: isScrollUp ? 'translateY(0)' : 'translateY(-100%)',
           }}
         >
           <Toolbar 

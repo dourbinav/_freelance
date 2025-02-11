@@ -151,6 +151,14 @@ const ProductPage = () => {
       console.error("Error deleting product:", error);
     }
   };
+  const parseSizes = (sizesString) => {
+    try {
+      return JSON.parse(sizesString);
+    } catch (error) {
+      console.error("Error parsing sizes:", error);
+      return [];
+    }
+  };
 
   const openAddProductDialog = () => setIsAddProductDialogOpen(true);
   const closeAddProductDialog = () => {
@@ -332,13 +340,13 @@ const ProductPage = () => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={product.Image[0] || product.Image}
+                    image={product.Image[0] || product.Image} // if here image is clicked by user i want it to get a pop and if ther are multiple images are shown in carousel if one then also in carousel
                     alt={product.name}
                   />
                   <CardContent>
                     <Typography variant="h6">{product.Name}</Typography>
                     <Typography color="textSecondary">{product.Category}</Typography>
-                    <Typography variant="body2">Sizes: {product.Size}</Typography>
+                    <Typography variant="body2">Sizes: {parseSizes(product.Sizes).join(", ")}</Typography>
                   </CardContent>
                   <CardActions>
                     <IconButton color="primary" onClick={() => alert("Edit Product")}>

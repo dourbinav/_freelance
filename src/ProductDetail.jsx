@@ -71,13 +71,13 @@ export const ProductDetail = () => {
   };
 
   return (
-    <div style={{ padding: "10px" }}> {/* Reduce padding here to reduce gap */}
+    <div style={{ padding: "10px" }}>
       <Grid container spacing={2}>
         {/* Product Details Section */}
-        <Grid container spacing={2} key={product.id} style={{ marginBottom: "20px" }}> {/* Reduce margin-bottom */}
+        <Grid container spacing={2} key={product.id} style={{ marginBottom: "20px" }}>
           {/* Left Section: Main Image and Slider */}
-          <Grid item xs={12} md={6}>
-            <Box>
+          <Grid item xs={12} md={6} >
+            <Box >
               {/* Main Image */}
               <CardMedia
                 component="img"
@@ -89,20 +89,20 @@ export const ProductDetail = () => {
                   height: isMobile ? "200px" : "300px",
                   objectFit: "contain",
                   borderRadius: "8px",
-                  marginBottom: "5px", // Reduce margin to reduce gap
+                  marginBottom: "5px", // Reduce margin
                 }}
               />
 
               {/* Thumbnail Slider */}
               {isImageArray && (
-                <Grid container spacing={1}>
+                <Grid container spacing={1} style={{padding:'10px'}}>
                   {product.Image.map((img, index) => (
                     <Grid item xs={3} key={index}>
                       <CardMedia
                         component="img"
                         image={img}
                         alt={`Thumbnail ${index + 1}`}
-                        loading="lazy" // Lazy load thumbnails
+                        loading="lazy"
                         onClick={() => setCurrentImageIndex(index)}
                         style={{
                           width: "100%",
@@ -125,7 +125,7 @@ export const ProductDetail = () => {
 
           {/* Right Section: Product Details */}
           <Grid item xs={12} md={6}>
-            <Card style={{ height: "100%", padding: "10px" }}> {/* Reduce padding */}
+            <Card style={{ height: "100%", padding: "10px" }}>
               <CardContent>
                 <Typography
                   variant="h6"
@@ -165,29 +165,36 @@ export const ProductDetail = () => {
         {/* Similar Products Section */}
         {similarProducts.length > 1 && (
           <Grid item xs={12}>
-            <Typography variant="h5" style={{ marginBottom: "15px" }}> {/* Reduced margin */}
+            <Typography variant="h5" style={{ marginBottom: "15px" }}>
               Similar Products
             </Typography>
 
-            {/* Box for Horizontal Scrolling */}
-            <Box style={{ display: "flex", overflowX: "auto", gap: "8px" }}> {/* Reduce gap */}
+            {/* Box for Vertical Scrolling and Hiding Scrollbar */}
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                overflowY: "auto", // Make it scroll vertically
+                maxHeight: "500px", // Limit height for the scrollable area
+                gap: "8px",
+                scrollbarWidth: "none", // Firefox
+                msOverflowStyle: "none", // Internet Explorer and Edge
+              }}
+            >
               {similarProducts
                 .filter((p) => p.id !== id) // Exclude the current product
                 .map((similarProduct) => (
-                  <Card
+                  <Box
                     key={similarProduct.id}
                     style={{
-                      cursor: "pointer",
-                      minWidth: isMobile ? "150px" : "200px", // Fixed width for cards
-                      width: isMobile ? "150px" : "200px", // Ensure consistent width
-                      height: "300px", // Fixed height for cards
                       display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      flexShrink: 0, // Prevent cards from shrinking
+                      alignItems: "center", // Align items in a row
+                      borderBottom: "1px solid #ccc", // Add bottom border to each row
+                      padding: "10px",
                     }}
                     onClick={() => handleSimilarProductClick(similarProduct.id)}
                   >
+                    {/* Image Section */}
                     <CardMedia
                       component="img"
                       image={
@@ -196,28 +203,46 @@ export const ProductDetail = () => {
                           : similarProduct.Image
                       }
                       alt={similarProduct.Name}
-                      loading="lazy" // Lazy load similar product images
+                      loading="lazy"
                       style={{
-                        height: "150px", // Fixed height for images
-                        objectFit: "contain", // Ensure images fit within the container
-                        width: "100%",
+                        width: "80px", // Smaller image size
+                        height: "80px", // Fixed height
+                        objectFit: "cover", // Ensure image fits the container
+                        marginRight: "15px", // Add space between image and text
                       }}
                     />
-                    <CardContent>
+
+                    {/* Text Section */}
+                    <div style={{ flex: 1 }}>
                       <Typography
                         variant="h6"
-                        style={{ fontSize: isMobile ? "1rem" : "inherit" }}
+                        style={{
+                          fontSize: isMobile ? "1rem" : "inherit",
+                          fontWeight: "bold",
+                        }}
                       >
                         {similarProduct.Name}
                       </Typography>
                       <Typography
-                        variant="body1"
-                        style={{ fontSize: isMobile ? "0.9rem" : "inherit" }}
+                        variant="body2"
+                        style={{
+                          fontSize: isMobile ? "0.9rem" : "inherit",
+                          color: "#888",
+                        }}
                       >
-                        Price: {similarProduct.Price}
+                        Sizes: {parseSizes(similarProduct.Sizes).join(", ")}
                       </Typography>
-                    </CardContent>
-                  </Card>
+                      <Typography
+                        variant="body2"
+                        style={{
+                          fontSize: isMobile ? "0.9rem" : "inherit",
+                          color: "#888",
+                        }}
+                      >
+                        Category: {similarProduct.Category}
+                      </Typography>
+                    </div>
+                  </Box>
                 ))}
             </Box>
           </Grid>
