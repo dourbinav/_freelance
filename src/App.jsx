@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Product } from './Product';
 import { ProductDetail } from './ProductDetail';
@@ -11,82 +11,201 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton
+  Button,
+  Grid,
+  Box,
+  IconButton,
+  useMediaQuery,
 } from '@mui/material';
-import AdminIcon from '@mui/icons-material/AccountCircle';  // You can use a material icon for admin, or import your own logo
+import AdminIcon from '@mui/icons-material/AccountCircle';
 
 const AppContent = () => {
   const location = useLocation(); // Get the current route
+  const isMobile = useMediaQuery('(max-width:600px)'); // Detect mobile screens
+  const [isScrollUp, setIsScrollUp] = useState(true); // State to track scroll direction
+  const [prevScrollY, setPrevScrollY] = useState(0); // To track the previous scroll position
+  
+  // Check if the current route should show the AppBar
+  const shouldShowAppBar = location.pathname === '/' || location.pathname === '/clothes' || location.pathname === '/flipflop' || location.pathname === '/watches';
 
-  // Check if the current route should hide the AppBar
-  const shouldHideAppBar = location.pathname === '/admin' || location.pathname === '/adminlogin';
+  // Handle scroll event
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    // If scrolling down
+    if (currentScrollY > prevScrollY) {
+      setIsScrollUp(false); // Hide buttons on scroll down
+    } else {
+      setIsScrollUp(true); // Show buttons on scroll up
+    }
+
+    setPrevScrollY(currentScrollY); // Update previous scroll position
+  };
+
+  // Add scroll event listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollY]); // Re-run when prevScrollY changes
 
   return (
     <>
-      <AppBar position="static" style={{ boxShadow: 'none' }}>
-        <Toolbar>
-          <Link  to="/">
-          {/* OutFitTrend Store Logo - Links to the homepage */}
-          <Typography 
-            variant="h6" 
-            style={{ flexGrow: 1, fontWeight: 'bold',color:'white' }}
-          >
-            OutFitTrend Store
-          </Typography>
+      {/* First AppBar (Navbar) */}
+      <AppBar 
+        position="fixed"  // Fixed position to stick at the top
+        style={{
+          boxShadow: 'none', 
+          width: '100%', 
+          top: 0, 
+          left: 0,
+          height: '80px', // Increase navbar height here
+        }}
+      >
+        <Toolbar style={{ height: '100%' ,backgroundColor:'#ffffff',padding:"2px 10px" }}> {/* Ensure toolbar height matches AppBar */}
+          <Link to="/" style={{ textDecoration: 'none', flexGrow: 1 }}>
+            {/* <Typography variant="h5" style={{  color: 'black' }}>
+              OutFitTrend Store
+            </Typography> */}
+            <img 
+              src="https://res.cloudinary.com/dbuzs2frj/image/upload/v1739465138/WhatsApp_Image_2025-02-13_at_10.12.42_AM_lcqgxx.jpg"
+              alt="Logo"
+              style={{
+                width: isMobile ? '50%' : '30%', // Set image size based on screen size
+                maxWidth: '100%', // Ensure image doesn't overflow
+                objectFit: 'contain', // Make sure the image maintains its aspect ratio
+              }}
+            />
           </Link>
           {/* Admin Icon */}
           <IconButton
             edge="end"
-            color="inherit"
+            // color="inherit"
             component={Link}
             to="/admin"
             style={{ marginLeft: 'auto' }} // Position the admin icon to the right
           >
-            <AdminIcon /> {/* You can replace this with your own admin logo */}
+            <AdminIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
 
       {/* Conditionally render AppBar for category navigation */}
-      {!shouldHideAppBar && (
-        <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-          <Toolbar style={{ justifyContent: 'center' }}>
-            <List style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
-              <ListItem button component={Link} to="/clothes" style={{ width: 'auto' }}>
-                <ListItemText primary="Clothes" />
-              </ListItem>
-              <ListItem button component={Link} to="/" style={{ width: 'auto' }}>
-                <ListItemText primary="Shoes" />
-              </ListItem>
-              <ListItem button component={Link} to="/watches" style={{ width: 'auto' }}>
-                <ListItemText primary="Watches" />
-              </ListItem>
-              <ListItem button component={Link} to="/Flipflop" style={{ width: 'auto' }}>
-                <ListItemText primary="Flip Flops" />
-              </ListItem>
-            </List>
+      {shouldShowAppBar && (
+        <Toolbar 
+          // position="fixed" 
+          style={{
+            boxShadow: 'none', 
+             backgroundColor:"#f8f8f8",
+            top: '80px',  // Adjust for the height of the first AppBar
+            width: '100%',
+            marginTop: '50px',
+            padding: '0',
+            // transform: isScrollUp ? 'translateY(0)' : 'translateY(-100%)',
+          }}
+        >
+          <Toolbar 
+            style={{
+              justifyContent: 'space-between',
+              width: '100%',
+              padding: '0',
+              height: '60px',  // Increase height for this toolbar
+            }}
+          >
+            {/* Use Grid to wrap Buttons for better control of layout on small screens */}
+            <Grid container spacing={1} rowGap={1} justifyContent="space-between">
+              <Grid item xs={6} sm={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/clothes"
+                  sx={{
+                    fontSize: isMobile ? '1.2rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0, 
+                    height: '48px', // Keep button height the same
+                  }}
+                >
+                  Clothes
+                </Button>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/"
+                  sx={{
+                    fontSize: isMobile ? '1.2rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
+                >
+                  Shoes
+                </Button>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/watches"
+                  sx={{
+                    fontSize: isMobile ? '1.2rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
+                >
+                  Watches
+                </Button>
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/flipflop"
+                  sx={{
+                    fontSize: isMobile ? '1.2rem' : '0.9rem', // Smaller font size here
+                    backgroundColor: '#1976d2', // Darker blue color
+                    borderRadius: 0,
+                    height: '48px', // Keep button height the same
+                  }}
+                >
+                  Flip Flops
+                </Button>
+              </Grid>
+            </Grid>
           </Toolbar>
-        </AppBar>
+        </Toolbar>
       )}
 
-      {/* Routes */}
-      <Routes>
-        <Route path="/" element={<Product />} />
-        <Route path="/productdetail/:id/:category" element={<ProductDetail />} />
-        <Route path="/Clothes" element={<Clothes />} />
-        <Route path="/watches" element={<Watches />} />
-        <Route path="/flipflop" element={<Flipflop />} />
+      {/* Add a margin-top to the main content to ensure it doesn't get hidden behind the fixed AppBar */}
+      <Box style={{ marginTop: '130px' }}> {/* This margin accounts for the AppBar height and new height adjustments */}
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<Product />} />
+          <Route path="/productdetail/:id/:category" element={<ProductDetail />} />
+          <Route path="/Clothes" element={<Clothes />} />
+          <Route path="/watches" element={<Watches />} />
+          <Route path="/flipflop" element={<Flipflop />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={localStorage.getItem('admin-auth') ? <ProductPage /> : <AdminLogin />}
-        />
-        <Route path="*" element={<div>Page Not Found</div>} />
-      </Routes>
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={localStorage.getItem('admin-auth') ? <ProductPage /> : <AdminLogin />}
+          />
+          <Route path="*" element={<div>Page Not Found</div>} />
+        </Routes>
+      </Box>
     </>
   );
 };
